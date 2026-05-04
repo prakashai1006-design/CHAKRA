@@ -38,25 +38,60 @@ const SudarshanaChakra = ({ className, size = 100 }: { className?: string, size?
     className={className} 
     xmlns="http://www.w3.org/2000/svg"
     animate={{ rotate: 360 }}
-    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
   >
+    <defs>
+      <linearGradient id="chakraGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#FF9933" />
+        <stop offset="45%" stopColor="#FF9933" />
+        <stop offset="45%" stopColor="#FFFFFF" />
+        <stop offset="55%" stopColor="#FFFFFF" />
+        <stop offset="55%" stopColor="#138808" />
+        <stop offset="100%" stopColor="#138808" />
+      </linearGradient>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feGaussianBlur in="SourceAlpha" stdDeviation="1" />
+        <feOffset dx="0.5" dy="0.5" result="offsetblur" />
+        <feComponentTransfer>
+          <feFuncA type="linear" slope="0.3" />
+        </feComponentTransfer>
+        <feMerge>
+          <feMergeNode />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+    
+    {/* Bolder Outer Blades with Tricolor Gradient */}
     <path 
-      d="M50 2 L55 18 L70 8 L68 24 L84 18 L78 32 L94 34 L84 44 L98 50 L84 56 L94 66 L78 68 L84 82 L68 76 L70 92 L55 82 L50 98 L45 82 L30 92 L32 76 L16 82 L22 68 L6 66 L16 56 L2 50 L16 44 L6 34 L22 32 L16 18 L32 24 L30 8 L45 18 Z" 
-      fill="#FF9933" 
+      d="M50 2 L58 18 L74 8 L70 26 L88 18 L80 34 L98 34 L86 46 L100 50 L86 54 L98 66 L80 66 L88 82 L70 74 L74 92 L58 82 L50 98 L42 82 L26 92 L30 74 L12 82 L20 66 L2 66 L14 54 L0 50 L14 46 L2 34 L20 34 L12 18 L30 26 L26 8 L42 18 Z" 
+      fill="url(#chakraGradient)"
+      filter="url(#shadow)"
+      stroke="#ffffff22"
+      strokeWidth="0.5"
     />
-    <circle cx="50" cy="50" r="32" fill="white" />
-    <circle cx="50" cy="50" r="30" fill="none" stroke="#138808" strokeWidth="1" />
-    <circle cx="50" cy="50" r="8" fill="#138808" />
-    <g stroke="#138808" strokeWidth="0.8">
+
+    {/* White Central Disc */}
+    <circle cx="50" cy="50" r="28" fill="white" />
+    
+    {/* Ashoka Chakra Blue elements */}
+    <circle cx="50" cy="50" r="26" fill="none" stroke="#000080" strokeWidth="1.5" />
+    <circle cx="50" cy="50" r="5" fill="#000080" />
+    
+    {/* 24 Navy Blue Spokes */}
+    <g stroke="#000080" strokeWidth="0.8">
       {[...Array(24)].map((_, i) => (
         <line 
           key={i} 
           x1="50" y1="50" 
-          x2={50 + 30 * Math.cos((i * 15 * Math.PI) / 180)} 
-          y2={50 + 30 * Math.sin((i * 15 * Math.PI) / 180)} 
+          x2={50 + 26 * Math.cos((i * 15 * Math.PI) / 180)} 
+          y2={50 + 26 * Math.sin((i * 15 * Math.PI) / 180)} 
         />
       ))}
     </g>
+
+    {/* Tiny hub detail */}
+    <circle cx="50" cy="50" r="2" fill="white" opacity="0.5" />
   </motion.svg>
 );
 
