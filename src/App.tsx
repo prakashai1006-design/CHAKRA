@@ -6,6 +6,40 @@
 import { motion } from 'motion/react';
 import { ShoppingBag, ArrowRight, Star, Leaf, Sparkles, Circle } from 'lucide-react';
 
+const SudarshanaChakra = ({ className, size = 100 }: { className?: string, size?: number }) => (
+  <motion.svg 
+    width={size}
+    height={size}
+    viewBox="0 0 100 100" 
+    className={className} 
+    xmlns="http://www.w3.org/2000/svg"
+    animate={{ rotate: 360 }}
+    transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+  >
+    {/* Outer Saffron Blades (Representing strength and fire) */}
+    <path 
+      d="M50 2 L55 18 L70 8 L68 24 L84 18 L78 32 L94 34 L84 44 L98 50 L84 56 L94 66 L78 68 L84 82 L68 76 L70 92 L55 82 L50 98 L45 82 L30 92 L32 76 L16 82 L22 68 L6 66 L16 56 L2 50 L16 44 L6 34 L22 32 L16 18 L32 24 L30 8 L45 18 Z" 
+      fill="#FF9933" 
+    />
+    {/* White Inner Disc (Representing purity and peace) */}
+    <circle cx="50" cy="50" r="32" fill="white" />
+    {/* Green Edge and Hub (Representing life and growth) */}
+    <circle cx="50" cy="50" r="30" fill="none" stroke="#138808" strokeWidth="1" />
+    <circle cx="50" cy="50" r="8" fill="#138808" />
+    {/* spokes aligned with Ashoka Chakra style */}
+    <g stroke="#138808" strokeWidth="0.8">
+      {[...Array(24)].map((_, i) => (
+        <line 
+          key={i} 
+          x1="50" y1="50" 
+          x2={50 + 30 * Math.cos((i * 15 * Math.PI) / 180)} 
+          y2={50 + 30 * Math.sin((i * 15 * Math.PI) / 180)} 
+        />
+      ))}
+    </g>
+  </motion.svg>
+);
+
 export default function App() {
   const products = [
     {
@@ -32,7 +66,8 @@ export default function App() {
 
       {/* Navigation */}
       <nav className="h-20 w-full flex items-center justify-between px-6 md:px-12 border-b border-clay/10 backdrop-blur-md bg-white/40 sticky top-0 z-50">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          <SudarshanaChakra size={36} className="drop-shadow-md" />
           <span className="text-2xl font-serif tracking-[0.2em] font-light">CHAKRA</span>
         </div>
         
@@ -59,9 +94,9 @@ export default function App() {
       <main className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
         {/* Hero Section */}
         <section className="lg:col-span-7 flex flex-col justify-center px-6 md:px-16 py-12 md:py-20 relative overflow-hidden">
-          {/* Background Motif */}
+          {/* Background Motif - Sudarshana Chakra */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none scale-150">
-            <Circle className="w-[600px] h-[600px] text-clay" strokeWidth={0.5} />
+            <SudarshanaChakra size={600} className="grayscale brightness-0 opacity-50" />
           </div>
 
           <motion.div 
