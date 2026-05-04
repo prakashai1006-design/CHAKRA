@@ -12,11 +12,24 @@
   --color-sage: #4A6741;
   --color-mist: #EDE8DF;
   --color-white: #FDFAF6;
+  --color-sidebar: #120C06;
 }
 
 @layer base {
   body {
-    @apply bg-cream text-deep font-sans antialiased;
+    @apply bg-mist text-deep font-sans antialiased overflow-x-hidden;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-saffron text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-saffron/20 hover:scale-[1.02] active:scale-[0.98] transition-all;
+  }
+  .btn-secondary {
+    @apply bg-white border border-clay/20 text-deep px-5 py-2.5 rounded-xl font-bold hover:bg-cream/50 transition-all;
+  }
+  .card-erp {
+    @apply bg-white border border-clay/10 rounded-2xl p-6 shadow-sm hover:shadow-md transition-all;
   }
 }
 

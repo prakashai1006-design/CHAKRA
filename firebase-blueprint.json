@@ -1,0 +1,112 @@
+{
+  "entities": {
+    "Ingredient": {
+      "title": "Ingredient",
+      "description": "Raw material used in production",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "unit": { "type": "string", "enum": ["kg", "liter", "pcs", "gm"] },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "unit", "category"]
+    },
+    "Vendor": {
+      "title": "Vendor",
+      "description": "Supplier of ingredients",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "contactName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "location": { "type": "string" }
+      },
+      "required": ["name", "location"]
+    },
+    "VendorMapping": {
+      "title": "Vendor Mapping",
+      "description": "Price mapping for ingredients from vendors in specific zones",
+      "type": "object",
+      "properties": {
+        "ingredientId": { "type": "string" },
+        "vendorId": { "type": "string" },
+        "price": { "type": "number" },
+        "zone": { "type": "string" },
+        "effectiveFrom": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ingredientId", "vendorId", "price", "zone"]
+    },
+    "Recipe": {
+      "title": "Recipe",
+      "description": "Base recipe for costing and production",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "ingredients": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "ingredientId": { "type": "string" },
+              "quantity": { "type": "number" }
+            }
+          }
+        },
+        "baseYield": { "type": "number" },
+        "category": { "type": "string" }
+      },
+      "required": ["name", "ingredients", "baseYield"]
+    },
+    "InventoryItem": {
+      "title": "Inventory Item",
+      "description": "Batch tracking for ingredients",
+      "type": "object",
+      "properties": {
+        "ingredientId": { "type": "string" },
+        "batchNumber": { "type": "string" },
+        "quantity": { "type": "number" },
+        "location": { "type": "string" },
+        "expiryDate": { "type": "string", "format": "date-time" },
+        "receivedDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ingredientId", "batchNumber", "quantity", "location", "expiryDate"]
+    },
+    "PurchaseOrder": {
+      "title": "Purchase Order",
+      "description": "Order sent to vendors",
+      "type": "object",
+      "properties": {
+        "vendorId": { "type": "string" },
+        "items": { "type": "array" },
+        "totalAmount": { "type": "number" },
+        "status": { "type": "string", "enum": ["draft", "sent", "received", "cancelled"] },
+        "zone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["vendorId", "status", "zone"]
+    },
+    "Location": {
+      "title": "Location",
+      "description": "Warehouses or production centers",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "city": { "type": "string" },
+        "type": { "type": "string", "enum": ["warehouse", "production"] }
+      },
+      "required": ["name", "city", "type"]
+    }
+  },
+  "firestore": {
+    "ingredients": { "schema": "Ingredient", "description": "Global ingredients catalog" },
+    "vendors": { "schema": "Vendor", "description": "Global vendors list" },
+    "vendorMappings": { "schema": "VendorMapping", "description": "Zone-wise ingredient pricing" },
+    "recipes": { "schema": "Recipe", "description": "Recipe catalog" },
+    "inventory": { "schema": "InventoryItem", "description": "Current stock levels with batch info" },
+    "purchaseOrders": { "schema": "PurchaseOrder", "description": "Procurement orders" },
+    "locations": { "schema": "Location", "description": "Physical zones/units" }
+  }
+}

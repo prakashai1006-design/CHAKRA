@@ -1,0 +1,93 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isAdmin() { return isVerified() && request.auth.token.email == "prakash.d@curefoods.in"; }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    
+    function isValidId(id) { 
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); 
+    }
+
+    // Validation helpers
+    function isValidIngredient(data) {
+      return data.keys().hasAll(['name', 'unit', 'category']) 
+        && data.name is string && data.name.size() > 0 && data.name.size() <= 100
+        && data.unit in ['kg', 'liter', 'pcs', 'gm']
+        && data.category is string;
+    }
+
+    function isValidVendor(data) {
+      return data.keys().hasAll(['name', 'location'])
+        && data.name is string && data.name.size() > 0
+        && data.location is string;
+    }
+
+    function isValidMapping(data) {
+      return data.keys().hasAll(['ingredientId', 'vendorId', 'price', 'zone'])
+        && data.price is number && data.price >= 0
+        && data.zone is string;
+    }
+
+    function isValidRecipe(data) {
+      return data.keys().hasAll(['name', 'ingredients', 'baseYield'])
+        && data.name is string 
+        && data.ingredients is list
+        && data.baseYield is number && data.baseYield > 0;
+    }
+
+    function isValidInventory(data) {
+      return data.keys().hasAll(['ingredientId', 'batchNumber', 'quantity', 'location', 'expiryDate'])
+        && data.quantity is number
+        && data.batchNumber is string;
+    }
+
+    // Collection matches
+    match /ingredients/{id} {
+      allow read: if isVerified();
+      allow create: if isAdmin() && isValidIngredient(incoming());
+      allow update: if isAdmin() && isValidIngredient(incoming());
+    }
+
+    match /vendors/{id} {
+      allow read: if isVerified();
+      allow create: if isAdmin() && isValidVendor(incoming());
+      allow update: if isAdmin() && isValidVendor(incoming());
+    }
+
+    match /vendorMappings/{id} {
+      allow read: if isVerified();
+      allow create: if isAdmin() && isValidMapping(incoming());
+      allow update: if isAdmin() && isValidMapping(incoming());
+    }
+
+    match /recipes/{id} {
+      allow read: if isVerified();
+      allow create: if isAdmin() && isValidRecipe(incoming());
+      allow update: if isAdmin() && isValidRecipe(incoming());
+    }
+
+    match /inventory/{id} {
+      allow read: if isVerified();
+      allow write: if isAdmin() && (request.method == 'delete' || isValidInventory(incoming()));
+    }
+
+    match /purchaseOrders/{id} {
+      allow read: if isVerified();
+      allow write: if isAdmin();
+    }
+
+    match /locations/{id} {
+      allow read: if isVerified();
+      allow write: if isAdmin();
+    }
+  }
+}
